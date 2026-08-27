@@ -1,4 +1,4 @@
-﻿name: Build VellorGram APK
+name: Build VellorGram APK
 
 on:
   push:
@@ -31,7 +31,7 @@ jobs:
 
       - name: Install NDK and CMake
         run: |
-          sdkmanager --install ndk;25.2.9519653 cmake;3.22.1
+          yes | sdkmanager "ndk;27.2.12479018" "cmake;3.22.1"
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
