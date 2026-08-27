@@ -29,15 +29,27 @@ jobs:
       - name: Set up Android SDK & NDK
         uses: android-actions/setup-android@v3
 
-      - name: Install NDK and CMake
+      - name: Install NDK, CMake and ccache
         run: |
+          sudo apt-get update && sudo apt-get install -y ccache
           yes | sdkmanager "ndk;27.2.12479018" "cmake;3.22.1"
+
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: ~/.ccache
+          key: ${{ runner.os }}-ccache-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-ccache-
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
       - name: Build Debug APK
-        run: ./gradlew :TMessagesProj_App:assembleAfatDebug --stacktrace
+        env:
+          USE_CCACHE: 1
+          NDK_CCACHE: /usr/bin/ccache
+        run: ./gradlew :TMessagesProj_App:assembleAfatDebug -PabiList=arm64-v8a --build-cache --parallel --stacktrace
 
       - name: Upload VellorGram APK
         uses: actions/upload-artifact@v4
