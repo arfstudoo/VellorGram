@@ -36,16 +36,16 @@ jobs:
 
       - name: Generate VellorGram App Icons
         run: |
-          magick logo_source.jpg -resize 48x48 TMessagesProj/src/main/res/mipmap-mdpi/ic_launcher.png
-          magick logo_source.jpg -resize 48x48 TMessagesProj/src/main/res/mipmap-mdpi/ic_launcher_round.png
-          magick logo_source.jpg -resize 72x72 TMessagesProj/src/main/res/mipmap-hdpi/ic_launcher.png
-          magick logo_source.jpg -resize 72x72 TMessagesProj/src/main/res/mipmap-hdpi/ic_launcher_round.png
-          magick logo_source.jpg -resize 96x96 TMessagesProj/src/main/res/mipmap-xhdpi/ic_launcher.png
-          magick logo_source.jpg -resize 96x96 TMessagesProj/src/main/res/mipmap-xhdpi/ic_launcher_round.png
-          magick logo_source.jpg -resize 144x144 TMessagesProj/src/main/res/mipmap-xxhdpi/ic_launcher.png
-          magick logo_source.jpg -resize 144x144 TMessagesProj/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
-          magick logo_source.jpg -resize 192x192 TMessagesProj/src/main/res/mipmap-xxxhdpi/ic_launcher.png
-          magick logo_source.jpg -resize 192x192 TMessagesProj/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
+          convert logo_source.jpg -resize 48x48 TMessagesProj/src/main/res/mipmap-mdpi/ic_launcher.png
+          convert logo_source.jpg -resize 48x48 TMessagesProj/src/main/res/mipmap-mdpi/ic_launcher_round.png
+          convert logo_source.jpg -resize 72x72 TMessagesProj/src/main/res/mipmap-hdpi/ic_launcher.png
+          convert logo_source.jpg -resize 72x72 TMessagesProj/src/main/res/mipmap-hdpi/ic_launcher_round.png
+          convert logo_source.jpg -resize 96x96 TMessagesProj/src/main/res/mipmap-xhdpi/ic_launcher.png
+          convert logo_source.jpg -resize 96x96 TMessagesProj/src/main/res/mipmap-xhdpi/ic_launcher_round.png
+          convert logo_source.jpg -resize 144x144 TMessagesProj/src/main/res/mipmap-xxhdpi/ic_launcher.png
+          convert logo_source.jpg -resize 144x144 TMessagesProj/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
+          convert logo_source.jpg -resize 192x192 TMessagesProj/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+          convert logo_source.jpg -resize 192x192 TMessagesProj/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
 
       - name: Cache ccache
         uses: actions/cache@v4
