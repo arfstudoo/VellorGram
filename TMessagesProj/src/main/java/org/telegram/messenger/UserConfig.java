@@ -122,6 +122,9 @@ public class UserConfig extends BaseController {
     }
 
     public static int getMaxAccountCount() {
+        if (org.telegram.messenger.vellor.VellorConfig.unlimitedAccounts) {
+            return 10;
+        }
         return hasPremiumOnAccounts() ? 5 : 3;
     }
 
