@@ -29,10 +29,23 @@ jobs:
       - name: Set up Android SDK & NDK
         uses: android-actions/setup-android@v3
 
-      - name: Install NDK, CMake and ccache
+      - name: Install NDK, CMake, ccache and imagemagick
         run: |
-          sudo apt-get update && sudo apt-get install -y ccache
+          sudo apt-get update && sudo apt-get install -y ccache imagemagick
           yes | sdkmanager "ndk;27.2.12479018" "cmake;3.22.1"
+
+      - name: Generate VellorGram App Icons
+        run: |
+          magick logo_source.jpg -resize 48x48 TMessagesProj/src/main/res/mipmap-mdpi/ic_launcher.png
+          magick logo_source.jpg -resize 48x48 TMessagesProj/src/main/res/mipmap-mdpi/ic_launcher_round.png
+          magick logo_source.jpg -resize 72x72 TMessagesProj/src/main/res/mipmap-hdpi/ic_launcher.png
+          magick logo_source.jpg -resize 72x72 TMessagesProj/src/main/res/mipmap-hdpi/ic_launcher_round.png
+          magick logo_source.jpg -resize 96x96 TMessagesProj/src/main/res/mipmap-xhdpi/ic_launcher.png
+          magick logo_source.jpg -resize 96x96 TMessagesProj/src/main/res/mipmap-xhdpi/ic_launcher_round.png
+          magick logo_source.jpg -resize 144x144 TMessagesProj/src/main/res/mipmap-xxhdpi/ic_launcher.png
+          magick logo_source.jpg -resize 144x144 TMessagesProj/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
+          magick logo_source.jpg -resize 192x192 TMessagesProj/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+          magick logo_source.jpg -resize 192x192 TMessagesProj/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
 
       - name: Cache ccache
         uses: actions/cache@v4

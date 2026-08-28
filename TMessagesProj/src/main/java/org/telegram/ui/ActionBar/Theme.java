@@ -9038,6 +9038,11 @@ public class Theme {
         } else {
             color = currentColors.valueAt(index);
         }
+        if (key == key_chats_actionBackground || key == key_dialogFloatingButton || key == key_chats_unreadCounter || key == key_chats_unreadCounterMuted || key == key_featuredStickers_addButton || key == key_chat_messageLinkOut || key == key_chat_recordedVoiceDot) {
+            return org.telegram.messenger.vellor.VellorConfig.CRIMSON_PRIMARY;
+        } else if (key == key_chats_actionPressedBackground || key == key_dialogFloatingButtonPressed) {
+            return org.telegram.messenger.vellor.VellorConfig.CRIMSON_ACCENT;
+        }
         if (key_windowBackgroundWhite == key || key_windowBackgroundGray == key || key_actionBarDefault == key || key_actionBarDefaultArchived == key) {
             color |= 0xff000000;
         }

@@ -353,6 +353,7 @@ public class ApplicationLoader extends Application {
 
         LauncherIconController.tryFixLauncherIconIfNeeded();
         ProxyRotationController.init();
+        org.telegram.messenger.vellor.VellorConfig.loadConfig();
     }
 
     public static void startPushService() {
