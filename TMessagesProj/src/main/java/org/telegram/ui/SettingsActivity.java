@@ -2090,4 +2090,212 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     public boolean canParentTabsSlide(MotionEvent ev, boolean forward) {
         return isSwipeBackEnabled(ev);
     }
+
+    public static class VellorSettingsActivity extends BaseFragment {
+
+        private ListAdapter listAdapter;
+        private RecyclerListView listView;
+
+        private int rowCount;
+        private int ghostHeaderRow;
+        private int ghostModeRow;
+        private int hideReadStatusRow;
+        private int hideOnlineRow;
+        private int hideTypingRow;
+        private int ghostSectionRow;
+
+        private int featuresHeaderRow;
+        private int antiDeleteRow;
+        private int noAdsRow;
+        private int saveRestrictedMediaRow;
+        private int unlimitedAccountsRow;
+        private int featuresSectionRow;
+
+        @Override
+        public boolean onFragmentCreate() {
+            super.onFragmentCreate();
+            updateRows();
+            return true;
+        }
+
+        private void updateRows() {
+            rowCount = 0;
+            ghostHeaderRow = rowCount++;
+            ghostModeRow = rowCount++;
+            hideReadStatusRow = rowCount++;
+            hideOnlineRow = rowCount++;
+            hideTypingRow = rowCount++;
+            ghostSectionRow = rowCount++;
+
+            featuresHeaderRow = rowCount++;
+            antiDeleteRow = rowCount++;
+            noAdsRow = rowCount++;
+            saveRestrictedMediaRow = rowCount++;
+            unlimitedAccountsRow = rowCount++;
+            featuresSectionRow = rowCount++;
+        }
+
+        @Override
+        public View createView(Context context) {
+            actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+            actionBar.setAllowOverlayTitle(true);
+            actionBar.setTitle("VellorGram Settings");
+            actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+                @Override
+                public void onItemClick(int id) {
+                    if (id == -1) {
+                        finishFragment();
+                    }
+                }
+            });
+
+            fragmentView = new FrameLayout(context);
+            FrameLayout frameLayout = (FrameLayout) fragmentView;
+            frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+
+            listView = new RecyclerListView(context);
+            listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+            listView.setVerticalScrollBarEnabled(false);
+            listView.setAdapter(listAdapter = new ListAdapter(context));
+            listView.setOnItemClickListener((view, position) -> {
+                if (position == ghostModeRow) {
+                    VellorConfig.toggleGhostMode(!VellorConfig.ghostMode);
+                    if (view instanceof org.telegram.ui.Cells.TextCheckCell) {
+                        ((org.telegram.ui.Cells.TextCheckCell) view).setChecked(VellorConfig.ghostMode);
+                    }
+                    listAdapter.notifyDataSetChanged();
+                } else if (position == hideReadStatusRow) {
+                    VellorConfig.hideReadStatus = !VellorConfig.hideReadStatus;
+                    VellorConfig.save();
+                    if (view instanceof org.telegram.ui.Cells.TextCheckCell) {
+                        ((org.telegram.ui.Cells.TextCheckCell) view).setChecked(VellorConfig.hideReadStatus);
+                    }
+                } else if (position == hideOnlineRow) {
+                    VellorConfig.hideOnline = !VellorConfig.hideOnline;
+                    VellorConfig.save();
+                    if (view instanceof org.telegram.ui.Cells.TextCheckCell) {
+                        ((org.telegram.ui.Cells.TextCheckCell) view).setChecked(VellorConfig.hideOnline);
+                    }
+                } else if (position == hideTypingRow) {
+                    VellorConfig.hideTyping = !VellorConfig.hideTyping;
+                    VellorConfig.save();
+                    if (view instanceof org.telegram.ui.Cells.TextCheckCell) {
+                        ((org.telegram.ui.Cells.TextCheckCell) view).setChecked(VellorConfig.hideTyping);
+                    }
+                } else if (position == antiDeleteRow) {
+                    VellorConfig.antiDeleteMessages = !VellorConfig.antiDeleteMessages;
+                    VellorConfig.save();
+                    if (view instanceof org.telegram.ui.Cells.TextCheckCell) {
+                        ((org.telegram.ui.Cells.TextCheckCell) view).setChecked(VellorConfig.antiDeleteMessages);
+                    }
+                } else if (position == noAdsRow) {
+                    VellorConfig.noSponsoredAds = !VellorConfig.noSponsoredAds;
+                    VellorConfig.save();
+                    if (view instanceof org.telegram.ui.Cells.TextCheckCell) {
+                        ((org.telegram.ui.Cells.TextCheckCell) view).setChecked(VellorConfig.noSponsoredAds);
+                    }
+                } else if (position == saveRestrictedMediaRow) {
+                    VellorConfig.saveRestrictedMedia = !VellorConfig.saveRestrictedMedia;
+                    VellorConfig.save();
+                    if (view instanceof org.telegram.ui.Cells.TextCheckCell) {
+                        ((org.telegram.ui.Cells.TextCheckCell) view).setChecked(VellorConfig.saveRestrictedMedia);
+                    }
+                } else if (position == unlimitedAccountsRow) {
+                    VellorConfig.unlimitedAccounts = !VellorConfig.unlimitedAccounts;
+                    VellorConfig.save();
+                    if (view instanceof org.telegram.ui.Cells.TextCheckCell) {
+                        ((org.telegram.ui.Cells.TextCheckCell) view).setChecked(VellorConfig.unlimitedAccounts);
+                    }
+                }
+            });
+
+            frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+            return fragmentView;
+        }
+
+        private class ListAdapter extends RecyclerListView.SelectionAdapter {
+            private Context mContext;
+
+            public ListAdapter(Context context) {
+                mContext = context;
+            }
+
+            @Override
+            public int getItemCount() {
+                return rowCount;
+            }
+
+            @Override
+            public boolean isEnabled(RecyclerView.ViewHolder holder) {
+                int position = holder.getAdapterPosition();
+                return position == ghostModeRow || position == hideReadStatusRow || position == hideOnlineRow || position == hideTypingRow || position == antiDeleteRow || position == noAdsRow || position == saveRestrictedMediaRow || position == unlimitedAccountsRow;
+            }
+
+            @Override
+            public int getItemViewType(int position) {
+                if (position == ghostHeaderRow || position == featuresHeaderRow) {
+                    return 0;
+                } else if (position == ghostSectionRow || position == featuresSectionRow) {
+                    return 1;
+                } else {
+                    return 2;
+                }
+            }
+
+            @NonNull
+            @Override
+            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view;
+                switch (viewType) {
+                    case 0:
+                        view = new org.telegram.ui.Cells.HeaderCell(mContext);
+                        view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                        break;
+                    case 1:
+                        view = new org.telegram.ui.Cells.ShadowSectionCell(mContext);
+                        break;
+                    case 2:
+                    default:
+                        view = new org.telegram.ui.Cells.TextCheckCell(mContext);
+                        view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                        break;
+                }
+                return new RecyclerListView.Holder(view);
+            }
+
+            @Override
+            public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+                switch (holder.getItemViewType()) {
+                    case 0:
+                        org.telegram.ui.Cells.HeaderCell headerCell = (org.telegram.ui.Cells.HeaderCell) holder.itemView;
+                        if (position == ghostHeaderRow) {
+                            headerCell.setText("GHOST MODE & PRIVACY");
+                        } else if (position == featuresHeaderRow) {
+                            headerCell.setText("EXTENDED FEATURES");
+                        }
+                        break;
+                    case 2:
+                        org.telegram.ui.Cells.TextCheckCell checkCell = (org.telegram.ui.Cells.TextCheckCell) holder.itemView;
+                        if (position == ghostModeRow) {
+                            checkCell.setTextAndCheck("Ghost Mode (Full Stealth)", VellorConfig.ghostMode, true);
+                        } else if (position == hideReadStatusRow) {
+                            checkCell.setTextAndCheck("Don't send read marks", VellorConfig.hideReadStatus, true);
+                        } else if (position == hideOnlineRow) {
+                            checkCell.setTextAndCheck("Hide online status", VellorConfig.hideOnline, true);
+                        } else if (position == hideTypingRow) {
+                            checkCell.setTextAndCheck("Hide typing / recording status", VellorConfig.hideTyping, false);
+                        } else if (position == antiDeleteRow) {
+                            checkCell.setTextAndCheck("Anti-Delete Messages (Save deleted)", VellorConfig.antiDeleteMessages, true);
+                        } else if (position == noAdsRow) {
+                            checkCell.setTextAndCheck("Block Telegram Sponsored Ads", VellorConfig.noSponsoredAds, true);
+                        } else if (position == saveRestrictedMediaRow) {
+                            checkCell.setTextAndCheck("Allow saving restricted/timer media", VellorConfig.saveRestrictedMedia, true);
+                        } else if (position == unlimitedAccountsRow) {
+                            checkCell.setTextAndCheck("Unlimited Accounts Support", VellorConfig.unlimitedAccounts, false);
+                        }
+                        break;
+                }
+            }
+        }
+    }
 }
